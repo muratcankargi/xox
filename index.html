@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>XOX</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <!-- 3x3 box yap,
+      her birine bastığında sırayla X ve O yazcak
+     çapraz veya düz 3 tane sırayla denk getiren kazancak
+     örneğin 3 tane X oldu 4. X'i koyarken ilk koyduğu X kaybolacak
+    -->
+    <div class="container">
+        <table>
+            <tr>
+                <th id="11"></th>
+                <th id="12"></th>
+                <th id="13"></th>
+            </tr>
+            <tr>
+                <th id="21"></th>
+                <th id="22"></th>
+                <th id="23"></th>
+            </tr>
+            <tr>
+                <th id="31"></th>
+                <th id="32"></th>
+                <th id="33"></th>
+            </tr>
+        </table>
+        <div id="snackbar">Oyun Bitti... <a href="index.html">Yeniden Başlatın</a></div>
+
+    </div>
+    <script>
+        var xturns = [];
+        var yturns = [];
+        var isX = true;
+        var turn = document.getElementById("turn");
+        var gameOver = false;
+        document.addEventListener('click', function (e) {
+            if (gameOver) return;
+
+            var target = e.target || e.srcElement,
+                text = target.textContent || target.innerText;
+
+            if (e.target.innerHTML == "") {
+                if (isX == true) {
+                    target.innerHTML = "X";
+                    xturns.push(target.id);
+                }
+                else {
+                    target.innerHTML = "O";
+                    yturns.push(target.id);
+                }
+                console.log(xturns, yturns);
+                isX = !isX;
+            }
+
+
+            if (xturns.length > 3) {
+                document.getElementById(xturns[0]).innerHTML = "";
+                xturns.shift();
+            }
+            if (yturns.length > 3) {
+                document.getElementById(yturns[0]).innerHTML = "";
+                yturns.shift();
+            }
+
+            if (isGameOver()) {
+                myFunction();
+                gameOver = true;
+            }
+
+        }, false);
+
+        function isGameOver() {
+            const o11 = document.getElementById("11").textContent.trim();
+            const o12 = document.getElementById("12").textContent.trim();
+            const o13 = document.getElementById("13").textContent.trim();
+
+            const o21 = document.getElementById("21").textContent.trim();
+            const o22 = document.getElementById("22").textContent.trim();
+            const o23 = document.getElementById("23").textContent.trim();
+
+            const o31 = document.getElementById("31").textContent.trim();
+            const o32 = document.getElementById("32").textContent.trim();
+            const o33 = document.getElementById("33").textContent.trim();
+
+            if ((o11 !== "" && o11 === o12 && o12 === o13) || (o21 !== "" && o21 === o22 && o22 === o23) || o31 !== "" && (o31 === o32 && o32 === o33)) {
+                return true;
+            }
+            if ((o11 !== "" && o11 === o21 && o21 === o31) || (o12 !== "" && o12 === o22 && o22 === o32) || o13 !== "" && (o13 === o23 && o23 === o33)) {
+                return true;
+            }
+            if ((o11 !== "" && o11 === o22 && o22 === o33) || (o13 !== "" && o13 === o22 && o22 === o31)) {
+                return true;
+            }
+            return false;
+        }
+        function myFunction() {
+            var x = document.getElementById("snackbar");
+            x.className = "show";
+            setTimeout(function () { x.className = x.className.replace("show", ""); }, 3000);
+        }
+    </script>
+</body>
+
+</html>
